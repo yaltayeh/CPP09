@@ -1,0 +1,11 @@
+*.o
+*.d
+*.a
+build/
+.vscode/
+.DS_Store
+
+# Ignore executables
+ex00/btc
+ex01/RPN
+ex02/PmergeMe
