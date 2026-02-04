@@ -1,6 +1,21 @@
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include "BitcoinExchange.hpp"
+
+bool parseInt(const std::string &s, int &out)
+{
+	std::istringstream iss(s);
+	iss >> out;
+	return !iss.fail() && iss.eof();
+}
+
+bool parseDouble(const std::string &s, double &out)
+{
+	std::istringstream iss(s);
+	iss >> out;
+	return !iss.fail() && iss.eof();
+}
 
 long BitcoinExchange::parseDate(const std::string &str)
 {
@@ -10,9 +25,13 @@ long BitcoinExchange::parseDate(const std::string &str)
 	if (str.length() != 10 || str[4] != '-' || str[7] != '-')
 		throw std::invalid_argument("Invalid date format");
 
-	int year = std::stoi(str.substr(0, 4));	 // Extract year
-	int month = std::stoi(str.substr(5, 2)); // Extract month
-	int day = std::stoi(str.substr(8, 2));	 // Extract day
+	int year;
+	int month;
+	int day;
+	if (!parseInt(str.substr(0, 4), year) ||
+		!parseInt(str.substr(5, 2), month) ||
+		!parseInt(str.substr(8, 2), day))
+		throw std::invalid_argument("Invalid date format");
 
 	if (year < 2009) // Bitcoin started in 2009
 		throw std::invalid_argument("Year cannot be before 2009");
@@ -63,7 +82,9 @@ void BitcoinExchange::loadDataBase(const char *filePath)
 		try
 		{
 			long date = parseDate(dateStr);
-			double value = std::stod(valueStr);
+			double value;
+			if (!parseDouble(valueStr, value))
+				throw std::invalid_argument("invalid value in database.");
 			if (value < 0)
 				throw std::invalid_argument("negative value in database.");
 			if (dataBase.find(date) != dataBase.end()) // Only insert if date is not already present
@@ -108,9 +129,8 @@ void BitcoinExchange::processFile(const char *filePath)
 			date = parseDate(dateStr);
 
 			// Validate and parse value
-			char *endPtr;
-			double value = std::strtod(valueStr.c_str(), &endPtr);
-			if (endPtr == valueStr.c_str() || *endPtr != '\0')
+			double value;
+			if (!parseDouble(valueStr, value))
 				throw std::invalid_argument("not a valid number.");
 			if (value < 0)
 				throw std::invalid_argument("not a positive number.");
