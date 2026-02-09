@@ -31,7 +31,8 @@ size_t PmergeMe::sort(Container &main_chain)
 		typename Container::iterator next;
 		for (it = main_chain.begin(); it != main_chain.end(); ++it)
 		{
-			next = std::next(it);
+			next = it;
+			std::advance(next, 1);
 			if (next != main_chain.end())
 			{
 				Pair p(level, *it, *next);
@@ -65,8 +66,10 @@ size_t PmergeMe::sort(Container &main_chain)
 			unsigned int idx = jacob.next();
 			for (; idx < pinneds.size();)
 			{
-				Pair p = *std::next(pinneds.begin(), idx);
-				pinneds.erase(std::next(pinneds.begin(), idx));
+				std::deque<Pair>::iterator it = pinneds.begin();
+				std::advance(it, idx);
+				Pair p = *it;
+				pinneds.erase(it);
 				if (p.partner != -1)
 				{
 					typename Container::iterator it_limit = main_chain.end();
