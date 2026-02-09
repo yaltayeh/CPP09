@@ -1,0 +1,78 @@
+# Ford Johnson Algorithm
+
+input: 2 1 7 4 9 5 3 8 
+
+1- make sort pair 
+(1 2) (4 7) (5 9) (3 8)
+
+ 1 4   3 5
+(2 7) (8 9)
+
+(2, 1) (8, 3)
+(7, 4) (9, 5)
+
+
+
+2- Recursively sort the larger elements of each pair: [2, 7, 9, 8]
+   
+   Problem: How to track which smaller element belongs to which larger one?
+   Solution: Store the index/iterator of the pair along with the larger value.
+   
+   Original Pairs with indices:
+   idx 0: (1, 2)
+   idx 1: (4, 7)
+   idx 2: (5, 9)
+   idx 3: (3, 8)
+
+   Recursive Input:  [(2, idx:0), (7, idx:1), (9, idx:2), (8, idx:3)]
+   Sorted Output:    [(2, idx:0), (7, idx:1), (8, idx:3), (9, idx:2)]
+
+   -> sorted sequence (main chain): 2 7 8 9
+      (mapped back using indices to retrieve partners: 1, 4, 3, 5)
+
+3- Create the main chain 'S' and pending elements 'b' to insert.
+   
+   Process: Iterate through the Sorted Output from step 2 using the stored indices.
+   Original Pairs: Isolate array [0:(1,2), 1:(4,7), 2:(5,9), 3:(3,8)]
+   
+   Recursive Result: [(2, idx:0), (7, idx:1), (8, idx:3), (9, idx:2)]
+   
+   1. Item (2, idx:0) -> Look up Pair[0]: (1, 2). The loser (smaller) is 1.
+      -> Pair 1: (a1=2, b1=1)
+   
+   2. Item (7, idx:1) -> Look up Pair[1]: (4, 7). The loser (smaller) is 4.
+      -> Pair 2: (a2=7, b2=4)
+      
+   3. Item (8, idx:3) -> Look up Pair[3]: (3, 8). The loser (smaller) is 3.
+      -> Pair 3: (a3=8, b3=3)
+      
+   4. Item (9, idx:2) -> Look up Pair[2]: (5, 9). The loser (smaller) is 5.
+      -> Pair 4: (a4=9, b4=5)
+      
+   Mapped Outcome:
+   Main Chain S (winners): [2, 7, 8, 9]
+   Pending b (losers):     [1, 4, 3, 5]
+
+4- Insert 'b' elements into 'S'.
+   
+   a) Insert b1 (1) at the start.
+      Result: [1, 2, 7, 8, 9]
+
+   b) Insert remaining 'b' elements using Jacobsthal order (J3=3, so insert b3, then b2. Next J4=5, so insert b5, b4...).
+      
+      - Insert b3 (3).
+        Limit is its pair a3 (8). Binary search in [1, 2, 7].
+        3 is > 2 and < 7.
+        Result: [1, 2, 3, 7, 8, 9]
+
+      - Insert b2 (4).
+        Limit is its pair a2 (7). Binary search in [1, 2, 3].
+        4 is > 3.
+        Result: [1, 2, 3, 4, 7, 8, 9]
+
+      - Insert b4 (5).
+        Limit is its pair a4 (9). Binary search in [1, 2, 3, 4, 7, 8].
+        5 is > 4 and < 7.
+        Result: [1, 2, 3, 4, 5, 7, 8, 9]
+
+

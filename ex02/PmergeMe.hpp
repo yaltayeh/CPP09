@@ -1,24 +1,33 @@
 #pragma once
 
-template <typename T>
+#include <vector>
+#include "IntWrapper.hpp"
+
+struct Pair
+{
+    int level;
+    IntWrapper value;
+    IntWrapper partner;
+
+    Pair(int l, IntWrapper v, IntWrapper p) : level(l), value(v), partner(p) {}
+};
+
 class PmergeMe
 {
 private:
-    T &data;
-    
-    void sort(T &container);
-
-public:
     PmergeMe();
-    PmergeMe(const T& initialData);
     ~PmergeMe();
     PmergeMe(const PmergeMe &other);
-    PmergeMe& operator=(const PmergeMe &other);
+    PmergeMe &operator=(const PmergeMe &other);
 
-    T & getData();
-    const T & getData() const;
+public:
+    template <typename Container>
+    static typename Container::iterator binarySearch(Container &chain, typename Container::value_type element, typename Container::iterator it_limit);
+    template <typename Container>
+    static void binaryInsert(Container &chain, typename Container::value_type element, typename Container::iterator limit);
 
-    void sort();
+    template <typename Container>
+    static size_t sort(Container &input);
 };
 
 #include "PmergeMe.tpp"

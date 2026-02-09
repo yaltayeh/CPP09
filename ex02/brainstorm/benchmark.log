@@ -1,0 +1,9 @@
+Size: 10 	 	Comparisons: 31 		Time: 72 			microseconds
+Size: 100 	 	Comparisons: 633 		Time: 210 			microseconds
+Size: 1000 	 	Comparisons: 9603 		Time: 7079 			microseconds
+Size: 10000 	Comparisons: 129024 	Time: 213478 		microseconds
+Size: 20000 	Comparisons: 278037 	Time: 710751 		microseconds
+Size: 50000 	Comparisons: 761427 	Time: 4413999 		microseconds
+Size: 100000 	Comparisons: 1622802 	Time: 17624179 		microseconds
+Size: 200000 	Comparisons: 3445414 	Time: 71528611 		microseconds
+Size: 500000 	Comparisons: 9273784 	Time: 450218537 	microseconds

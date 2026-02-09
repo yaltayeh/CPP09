@@ -3,6 +3,9 @@ NAME = PmergeMe
 BUILD_DIR = build
 
 FILES = main.cpp \
+		IntWrapper.cpp \
+		Jacobsthal.cpp \
+		Benchmark.cpp
 
 CC = c++
 CFLAGS = -Wall -Wextra -Werror -MMD -std=c++98
